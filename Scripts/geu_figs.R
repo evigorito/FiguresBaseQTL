@@ -76,6 +76,8 @@ btrecase <- lapply(btrecase_dir, function(i) {
 
 names(btrecase) <- basename(btrecase_dir)
 
+## save
+saveRDS(btrecase, "/mrc-bsu/scratch/ev250/EGEUV1/quant/outputPaper/btrecase.GT.nGT.all.rds")
 
 ## GEt number of genes run for GT/RNA
 lapply(btrecase, function(i) i[, unique(Gene_id), rbias][,.N,rbias])
@@ -153,6 +155,11 @@ gt.rna[(null.95.gt=='no' & null.95.rna == 'no' & sign(log2_aFC_mean.gt) != sign(
 gt.rna[(null.95.gt=='no' & null.95.rna == 'no' & sign(log2_aFC_mean.gt) != sign(log2_aFC_mean.rna)), log2_aFC_mean.rna:= -log2_aFC_mean.rna]
 gt.rna[(null.95.gt=='no' & null.95.rna == 'no' & sign(log2_aFC_mean.gt) != sign(log2_aFC_mean.rna)),
        grep("log2_aFC_[0-9].*rna", names(gt.rna), value=T):= lapply(grep("log2_aFC_[0-9].*rna", names(gt.rna), value=T), function(i) -get(i))]
+
+
+## save gt.rna
+saveRDS(gt.rna, "/mrc-bsu/scratch/ev250/EGEUV1/quant/outputPaper/btrecase.GT.ngt.wide.rds")
+
 
 ## Select association within 100kB, null 99  and plot 
 
@@ -1475,6 +1482,10 @@ qc1 <- add.null(qc1)
 qc2 <- qc2[Rhat<maxRhat,]
 qc2 <- qc2[info<=max.info,]
 qc2 <- add.null(qc2)
+
+##
+saveRDS(qc1, "/mrc-bsu/scratch/ev250/EGEUV1/quant/outputPaper/qc1.rds")
+saveRDS(qc2, "/mrc-bsu/scratch/ev250/EGEUV1/quant/outputPaper/qc2.rds")
 
 
 s <- c("fSNP.DNA","fSNP.RNA")

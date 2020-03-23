@@ -100,7 +100,10 @@ pso_nor1 <- function(stan.dir, rbias, skin, gene_coord, d=10^5, info.max=NULL, G
             return(dt)
         })
     names(all) <- skin
-
+    
+    ##save
+    saveRDS(all, "/mrc-bsu/scratch/ev250/EGEUV1/quant/outputPaper/psoriasis.all.rds")
+    
     all.l <- rbindlist(all)
     ## common assoc
     all.w <- Reduce(function(a,b){

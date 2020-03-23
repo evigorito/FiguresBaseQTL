@@ -22,6 +22,9 @@ import os
 subworkflow GeuRefbias:
     workdir: "/home/ev250/Bayesian_inf/trecase/Scripts/stan_eff/real_data/refbias"
 
+subworkflow GeuRefbias2:
+    workdir: "/home/ev250/Bayesian_inf/trecase/Scripts/stan_eff/real_data/refbias2"             
+
 subworkflow InputPrep:
     workdir: "/home/ev250/Bayesian_inf/trecase/Scripts/stan_eff/real_data/psoriasis"
 
@@ -35,6 +38,7 @@ subworkflow PsoRefBias:
 
 # get home directories for Snakefiles in subdirectories to call Scripts/Functions etc avoiding duplication
 home_GeuRefbias = vars(vars(workflow)['_subworkflows']['GeuRefbias'])['_workdir']
+home_GeuRefbias2 = vars(vars(workflow)['_subworkflows']['GeuRefbias2'])['_workdir']
 home_InputPrep = vars(vars(workflow)['_subworkflows']['InputPrep'])['_workdir']
 home_PsoBtrecase = vars(vars(workflow)['_subworkflows']['PsoBtrecase'])['_workdir']
 home_PsoRefBias = vars(vars(workflow)['_subworkflows']['PsoRefBias'])['_workdir']
@@ -94,7 +98,8 @@ rule geu_figs:
     """ Prepares figures from geuvadis data"""
     input:
         geneStEnd=InputPrep(config['geneStEnd']), 
-        AI=GeuRefbias(config["geu_refb"] + "/post_remap/pre_post_AI.txt"),
+        AIgt=GeuRefbias2(config["geu_refb2"] + "/post_remap/pre_post_AI.txt"),
+        AIngt=GeuRefbias(config["geu_refb"] + "/post_remap/pre_post_AI.txt"),
         eSNPs=config['fSNPs'],
         dseq=expand(config['dseq'] + "/RunNBmodelbatch{N}_chr22.nbmodelRes.csv", N=[x+1 for x in range(10)]),
         gtex= config['EBV'] + "/Cells_EBV-transformed_lymphocytes.allpairs.txt.gz",
@@ -113,6 +118,7 @@ rule geu_figs:
     params:
         #btrecase=expand(GeuRefbias(config['geu_refb']) + "/Btrecase/{prior}/{source}", prior=["SpikeMixV3_2"], source=["GT","RNA"]),
         btrecase=expand(GeuRefbias(config['geu_refb']) + "/Btrecase/SpikeMixV3_2/{source}", source=["GT", "fisher001/RNA"]),
+        btrecaseGC=GeuRefbias(config['geu_refb2']) + "/Btrecase/SpikeMixV3_2/GT"
         lm=GeuRefbias(config['geu_refb']) + "/lm/log_counts",
         trec=expand(GeuRefbias(config['geu_refb']) + "/Btrec/{prior}", prior=["SpikeMixV3_2"]),
         rbias=["norefbias", "rbias"],
